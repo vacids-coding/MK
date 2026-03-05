@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VOID OBFUSCATOR 1.0</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
@@ -19,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
@@ -28,21 +28,21 @@
             background-color: #10101a;
             border: 1px solid #2a2a5a;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            padding: 25px;
+            padding: 20px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             border-bottom: 1px solid #2a2a5a;
             padding-bottom: 15px;
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .header h1 span {
@@ -50,54 +50,57 @@
         }
 
         .header .version {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #a0a0ff;
             background-color: #1a1a2a;
             display: inline-block;
-            padding: 5px 25px;
+            padding: 5px 20px;
             border: 1px solid #3a3a7a;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .main-content {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .obfuscator-panel {
             flex: 2;
-            min-width: 500px;
+            min-width: 300px;
             background-color: #0c0c18;
             border: 1px solid #2a2a5a;
             padding: 20px;
         }
 
         .obfuscator-panel h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
             color: #ffffff;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .badge {
             background-color: #1a1a2a;
             color: #8a8aff;
-            font-size: 0.9rem;
-            padding: 3px 15px;
+            font-size: 0.8rem;
+            padding: 3px 12px;
             border: 1px solid #3a3a7a;
-            margin-left: 10px;
         }
 
         .code-area {
             background-color: #05050a;
             border: 1px solid #2a2a5a;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .code-header {
             background-color: #151520;
-            padding: 10px 15px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,35 +110,43 @@
         .code-header span {
             color: #a0a0ff;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .code-header button {
             background-color: #202030;
             color: #ffffff;
             border: 1px solid #3a3a7a;
-            padding: 4px 15px;
+            padding: 5px 15px;
             cursor: pointer;
             font-size: 0.8rem;
             transition: 0.2s;
+            min-height: 35px;
+            min-width: 70px;
         }
 
         .code-header button:hover {
             background-color: #2a2a4a;
         }
 
+        .code-header button:active {
+            background-color: #3a3a6a;
+        }
+
         textarea {
             width: 100%;
-            height: 200px;
+            height: 180px;
             background-color: #05050a;
             border: none;
-            padding: 15px;
+            padding: 12px;
             color: #d0d0ff;
             font-family: 'Courier New', monospace;
             font-size: 13px;
             line-height: 1.4;
             resize: vertical;
             outline: none;
+            -webkit-appearance: none;
+            border-radius: 0;
         }
 
         textarea::placeholder {
@@ -144,16 +155,17 @@
 
         .obfuscate-btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background-color: #1a1a2a;
             color: #ffffff;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 600;
             border: 2px solid #3a3a7a;
             cursor: pointer;
             transition: 0.2s;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            min-height: 60px;
         }
 
         .obfuscate-btn:hover {
@@ -161,42 +173,49 @@
             border-color: #5a5aff;
         }
 
+        .obfuscate-btn:active {
+            background-color: #3a3a6a;
+        }
+
         .stats {
             display: flex;
             justify-content: space-between;
             background-color: #151520;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border: 1px solid #2a2a5a;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
             text-align: center;
+            flex: 1;
+            min-width: 70px;
         }
 
         .stat-value {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #ffffff;
         }
 
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #8a8aff;
             text-transform: uppercase;
         }
 
         .info-panel {
             flex: 1;
-            min-width: 280px;
+            min-width: 250px;
             background-color: #0c0c18;
             border: 1px solid #2a2a5a;
             padding: 20px;
         }
 
         .info-panel h2 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
             color: #ffffff;
             font-weight: 500;
             border-bottom: 1px solid #2a2a5a;
@@ -204,34 +223,34 @@
         }
 
         .info-panel p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.5;
             color: #b0b0ff;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .warning-box {
             background-color: #1a1020;
             border: 1px solid #aa5555;
-            padding: 15px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 15px 0;
             color: #ffaaaa;
             text-align: center;
         }
 
         .warning-box .infinity {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #ff6666;
             margin-bottom: 5px;
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
             color: #5a5a8a;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             border-top: 1px solid #2a2a5a;
-            padding-top: 15px;
+            padding-top: 12px;
         }
 
         .error-message {
@@ -249,14 +268,42 @@
         }
 
         .infinity-loop {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #ff8888;
             margin-top: 10px;
             display: none;
+            text-align: center;
+            padding: 8px;
+            background-color: #1a0a0a;
+            border: 1px solid #aa5555;
         }
 
         .infinity-loop.active {
             display: block;
+        }
+
+        @media (max-width: 700px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .obfuscate-btn {
+                font-size: 1.2rem;
+                padding: 14px;
+            }
+            
+            textarea {
+                height: 150px;
+            }
+            
+            .code-header button {
+                padding: 8px 12px;
+                min-height: 40px;
+            }
         }
     </style>
 </head>
@@ -268,11 +315,11 @@
         </div>
 
         <div class="main-content">
-            <!-- Obfuscator Panel (PRIMA) -->
+            <!-- Obfuscator Panel -->
             <div class="obfuscator-panel">
                 <h3>
                     INPUT LUA CODE
-                    <span class="badge">.lua only</span>
+                    <span class="badge">.lua</span>
                 </h3>
 
                 <div class="code-area">
@@ -284,7 +331,7 @@
                 </div>
 
                 <div class="error-message" id="errorMsg">
-                    ERROR: Invalid Lua syntax - cannot obfuscate
+                    ERROR: Invalid Lua syntax
                 </div>
 
                 <button class="obfuscate-btn" id="obfuscateBtn">OBFUSCATE</button>
@@ -317,21 +364,21 @@
                 </div>
             </div>
 
-            <!-- Info Panel (DOPO) -->
+            <!-- Info Panel -->
             <div class="info-panel">
                 <h2>What is an obfuscator?</h2>
                 <p>This tool transforms your Lua code into an unreadable format, making it extremely difficult for others to understand or reverse-engineer. The code remains fully functional but becomes impossible to read.</p>
                 
-                <p>The obfuscation process includes variable renaming, string encryption, and anti-debug protection. Anyone attempting to deobfuscate the code will trigger infinite loops and crash their decompiler.</p>
+                <p>The obfuscation process includes variable renaming, string encryption, and anti-debug protection. Anyone attempting to deobfuscate the code will trigger infinite loops.</p>
                 
                 <div class="warning-box">
                     <div class="infinity">∞</div>
                     <div style="font-weight: bold; margin-bottom: 5px;">ANTI-DECOMPILATION</div>
-                    <div style="font-size: 0.9rem;">Trying to deobfuscate = infinite loop</div>
+                    <div style="font-size: 0.85rem;">Trying to deobfuscate = infinite loop</div>
                     <div style="font-size: 0.8rem; margin-top: 8px; color: #ff8888;">while true do end</div>
                 </div>
 
-                <p style="font-size: 0.9rem; margin-top: 15px;">
+                <p style="font-size: 0.85rem; margin-top: 10px;">
                     • Variables renamed randomly<br>
                     • Strings converted to ASCII<br>
                     • Anti-debug infinite loops<br>
@@ -387,7 +434,7 @@
             return result;
         }
 
-        // Obfuscate function
+        // Obfuscate function - COMPLETELY UNREADABLE OUTPUT
         function obfuscateLua(code) {
             const startTime = performance.now();
             
@@ -395,29 +442,30 @@
             let obfuscated = '--[[\n    VOID OBFUSCATOR 1.0\n    INFINITE LOOP PROTECTION ACTIVE\n]]--\n\n';
             
             // Add anti-debug infinite loop
-            const loopVar = randomString(16);
+            const loopVar = randomString(24);
             obfuscated += 'local ' + loopVar + ' = debug and debug.getinfo or nil\n';
             obfuscated += 'if ' + loopVar + ' then\n';
-            obfuscated += '    local ' + randomString(16) + ' = ' + loopVar + '(2, "S")\n';
-            obfuscated += '    if ' + randomString(16) + ' and ' + randomString(16) + '.source then\n';
-            obfuscated += '        if string.find(' + randomString(16) + '.source, "decompile") then\n';
+            obfuscated += '    local ' + randomString(24) + ' = ' + loopVar + '(2, "S")\n';
+            obfuscated += '    if ' + randomString(24) + ' and ' + randomString(24) + '.source then\n';
+            obfuscated += '        if string.find(' + randomString(24) + '.source, "decompile") then\n';
             obfuscated += '            while true do end\n';
             obfuscated += '        end\n';
             obfuscated += '    end\n';
             obfuscated += 'end\n\n';
             
-            // Process the original code line by line
+            // Process the original code
             const lines = code.split('\n');
             for (let line of lines) {
                 if (line.trim() === '' || line.trim().startsWith('--')) continue;
                 
-                // Replace variable names (simplified but effective)
+                // Replace variable names with random strings
                 let processedLine = line.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, (match) => {
                     const keywords = ['local', 'function', 'end', 'if', 'then', 'else', 'for', 'while', 
-                                    'do', 'return', 'print', 'game', 'Players', 'workspace', 'Instance'];
+                                    'do', 'return', 'print', 'game', 'Players', 'workspace', 'Instance',
+                                    'nil', 'true', 'false', 'not', 'and', 'or', 'repeat', 'until'];
                     if (keywords.includes(match)) return match;
                     if (match.length < 2) return match;
-                    return randomString(24);
+                    return randomString(32);
                 });
                 
                 // Convert strings to string.char()
@@ -442,11 +490,24 @@
                 obfuscated += processedLine + '\n';
             }
             
-            // Add a hidden infinite loop at the end
-            obfuscated += '\n-- ' + randomString(32) + '\n';
-            obfuscated += 'do local ' + randomString(16) + ' = 0 ';
-            obfuscated += 'repeat ' + randomString(16) + ' = ' + randomString(16) + ' + 1 ';
-            obfuscated += 'until ' + randomString(16) + ' > 999999 end\n';
+            // Add hidden infinite loop at the end
+            obfuscated += '\n-- ' + randomString(40) + '\n';
+            obfuscated += 'do local ' + randomString(24) + ' = 0 ';
+            obfuscated += 'repeat ' + randomString(24) + ' = ' + randomString(24) + ' + 1 ';
+            obfuscated += 'until ' + randomString(24) + ' > 999999 end\n';
+            
+            // Add random fake comments everywhere
+            for (let i = 0; i < 5; i++) {
+                const pos = Math.floor(Math.random() * obfuscated.length);
+                const fakeComments = [
+                    '-- while true do end',
+                    '-- for i=1,math.huge do end',
+                    '-- ::loop:: goto loop',
+                    '-- INFINITE LOOP ACTIVE'
+                ];
+                const comment = fakeComments[Math.floor(Math.random() * fakeComments.length)];
+                obfuscated = obfuscated.slice(0, pos) + '\n' + comment + '\n' + obfuscated.slice(pos);
+            }
             
             const endTime = performance.now();
             
@@ -480,7 +541,7 @@
             }
             
             if (!checkLuaSyntax(code)) {
-                errorMsg.innerText = 'ERROR: Invalid Lua syntax - cannot obfuscate';
+                errorMsg.innerText = 'ERROR: Invalid Lua syntax';
                 errorMsg.classList.add('active');
                 infinityMsg.classList.remove('active');
                 return;
@@ -508,12 +569,20 @@
             infinityMsg.classList.remove('active');
         });
 
-        // Copy button
+        // Copy button - MOBILE FRIENDLY
         copyBtn.addEventListener('click', () => {
             outputCode.select();
+            outputCode.setSelectionRange(0, 99999); // For mobile
             document.execCommand('copy');
+            
+            const originalText = copyBtn.innerText;
             copyBtn.innerText = 'COPIED!';
-            setTimeout(() => copyBtn.innerText = 'COPY', 1500);
+            copyBtn.style.backgroundColor = '#2a5a2a';
+            
+            setTimeout(() => {
+                copyBtn.innerText = originalText;
+                copyBtn.style.backgroundColor = '#202030';
+            }, 1500);
         });
 
         // Update counters on input
@@ -522,6 +591,13 @@
             document.getElementById('charCount').innerText = text.length;
             document.getElementById('linesCount').innerText = text.split('\n').length;
         });
+
+        // Mobile touch improvements
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('button').forEach(btn => {
+                btn.style.minHeight = '44px';
+            });
+        }
     </script>
 </body>
 </html>
