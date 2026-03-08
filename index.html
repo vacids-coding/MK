@@ -1,282 +1,601 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK OBFUSCATOR 1.0</title>
+    <title>Notepad Plus - Modifica e Ricerca</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', monospace;
         }
-        
+
         body {
-            background: #000000;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2d2d2d;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            color: #fff;
         }
-        
-        .container {
-            width: 1400px;
-            max-width: 100%;
-            background: #0a0a0a;
-            border: 2px solid #0066cc;
+
+        .notepad-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            background-color: #1e1e1e;
             border-radius: 8px;
-            padding: 30px;
-        }
-        
-        .title {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #0066cc;
-            padding-bottom: 20px;
-        }
-        
-        .title h1 {
-            color: #0066cc;
-            font-size: 42px;
-            font-weight: bold;
-            text-shadow: 0 0 10px #0066cc;
-        }
-        
-        .title h1 span {
-            color: #ffffff;
-        }
-        
-        .title p {
-            color: #3399ff;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        
-        .main-row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .input-area, .output-area {
-            flex: 1;
-            background: #111111;
-            border: 1px solid #0066cc;
-            border-radius: 4px;
-            padding: 20px;
-        }
-        
-        .input-area label, .output-area label {
-            color: #0066cc;
-            display: block;
-            margin-bottom: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        textarea {
-            width: 100%;
-            height: 400px;
-            background: #1a1a1a;
-            border: 1px solid #0066cc;
-            color: #00ff00;
-            font-size: 14px;
-            padding: 15px;
-            resize: none;
-            outline: none;
-        }
-        
-        textarea::placeholder {
-            color: #336699;
-        }
-        
-        .output-box {
-            width: 100%;
-            height: 400px;
-            background: #1a1a1a;
-            border: 1px solid #0066cc;
-            color: #00ff00;
-            font-size: 14px;
-            padding: 15px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        
-        .center-button {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            background-color: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #3d3d3d;
+            flex-wrap: wrap;
+        }
+
+        .file-actions {
+            display: flex;
             gap: 10px;
         }
-        
-        .obfuscate-btn {
-            background: #0066cc;
-            color: white;
+
+        .btn {
+            background-color: #3d3d3d;
+            color: #fff;
             border: none;
-            padding: 20px 30px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            letter-spacing: -5px;
+            padding: 8px 16px;
             border-radius: 4px;
-            transition: 0.3s;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
         }
-        
-        .obfuscate-btn:hover {
-            background: #3399ff;
-            box-shadow: 0 0 20px #0066cc;
+
+        .btn:hover {
+            background-color: #4d4d4d;
         }
-        
-        .copy-btn {
-            background: #1a1a1a;
-            color: #0066cc;
-            border: 1px solid #0066cc;
-            padding: 10px;
+
+        .btn-primary {
+            background-color: #007acc;
+        }
+
+        .btn-primary:hover {
+            background-color: #1c8ad9;
+        }
+
+        /* Search bar */
+        .search-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #3d3d3d;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        .search-icon {
+            font-size: 18px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .search-icon:hover {
+            color: #fff;
+        }
+
+        .search-input {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            padding: 6px;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-results {
+            color: #888;
+            font-size: 13px;
+            min-width: 60px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
             font-size: 16px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: #4d4d4d;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Text area */
+        .editor {
+            flex: 1;
+            padding: 20px;
+            background-color: #1e1e1e;
+            overflow: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            outline: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            white-space: pre;
+            overflow: auto;
+        }
+
+        /* Highlight per la ricerca */
+        .highlight-search {
+            background-color: #ffd700;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Status bar */
+        .status-bar {
+            background-color: #007acc;
+            color: #fff;
+            padding: 6px 15px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Ispettore laterale */
+        .inspect-sidebar {
+            position: fixed;
+            top: 50%;
+            right: -300px;
+            transform: translateY(-50%);
+            width: 300px;
+            background-color: #2d2d2d;
+            border-left: 1px solid #3d3d3d;
+            border-radius: 8px 0 0 8px;
+            box-shadow: -4px 0 12px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .inspect-sidebar.open {
+            right: 0;
+        }
+
+        .inspect-header {
+            background-color: #007acc;
+            padding: 12px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 0 0 0;
+        }
+
+        .inspect-content {
+            padding: 15px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
             cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .close-btn:hover {
+            opacity: 0.8;
+        }
+
+        .word-entry {
+            background-color: #3d3d3d;
+            margin-bottom: 8px;
+            padding: 10px;
             border-radius: 4px;
+            cursor: pointer;
+            border-left: 3px solid #007acc;
         }
-        
-        .copy-btn:hover {
-            background: #0066cc;
-            color: white;
+
+        .word-entry:hover {
+            background-color: #4d4d4d;
         }
-        
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #0066cc;
-            border-top: 1px solid #0066cc;
-            padding-top: 20px;
-            font-size: 12px;
+
+        .line-number {
+            color: #007acc;
+            font-weight: bold;
+            margin-right: 10px;
         }
-        
-        @media (max-width: 900px) {
-            .main-row {
-                flex-direction: column;
-            }
-            
-            .obfuscate-btn {
-                writing-mode: horizontal-tb;
-                padding: 15px 30px;
-                letter-spacing: normal;
-            }
-            
-            textarea, .output-box {
-                height: 300px;
-            }
+
+        .context-text {
+            color: #d4d4d4;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">
-            <h1>MK <span>OBFUSCATOR</span></h1>
-            <p>PROFESSIONAL LUA OBFUSCATION • ANTI-DEOBFUSCATOR</p>
+    <div class="notepad-container">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="file-actions">
+                <button class="btn" onclick="openFile()">
+                    <span>📂</span> Apri file
+                </button>
+                <button class="btn" onclick="saveFile()">
+                    <span>💾</span> Salva
+                </button>
+                <button class="btn" onclick="newFile()">
+                    <span>📄</span> Nuovo
+                </button>
+            </div>
+
+            <!-- Search con icona ispezione -->
+            <div class="search-section">
+                <span class="search-icon" onclick="toggleInspect()" title="Ispeziona parola">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Cerca nel testo..." oninput="searchText()">
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="previousResult()" id="prevBtn" disabled>←</button>
+                    <button class="nav-btn" onclick="nextResult()" id="nextBtn" disabled>→</button>
+                </div>
+                <span class="search-results" id="searchResults">0/0</span>
+            </div>
         </div>
-        
-        <div class="main-row">
-            <div class="input-area">
-                <label>INPUT</label>
-                <textarea id="inputCode" placeholder="Paste your Lua code here..."></textarea>
-            </div>
-            
-            <div class="center-button">
-                <button class="obfuscate-btn" onclick="obfuscate()">OBFUSCATE</button>
-                <button class="copy-btn" onclick="copyOutput()">COPY</button>
-            </div>
-            
-            <div class="output-area">
-                <label>OUTPUT</label>
-                <div id="outputCode" class="output-box">-- [[ MK OBFUSCATOR 1.0 ]]</div>
-            </div>
+
+        <!-- Editor -->
+        <div class="editor">
+            <textarea id="editor" placeholder="Incolla qui il tuo testo o apri un file TXT..."></textarea>
         </div>
-        
-        <div class="footer">
-            MK OBFUSCATOR 1.0 • BLUE & BLACK EDITION • INFINITE LOOP PROTECTION
+
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="file-info">
+                <span id="fileName">Nuovo documento</span>
+                <span id="fileSize">0 caratteri</span>
+            </div>
+            <div id="currentWord">Pronto</div>
+        </div>
+    </div>
+
+    <!-- Sidebar ispezione -->
+    <div class="inspect-sidebar" id="inspectSidebar">
+        <div class="inspect-header">
+            <span>🔍 Ispezione risultati</span>
+            <button class="close-btn" onclick="toggleInspect()">×</button>
+        </div>
+        <div class="inspect-content" id="inspectContent">
+            <p style="color: #888; text-align: center;">Cerca una parola per vedere i risultati</p>
         </div>
     </div>
 
     <script>
-        function obfuscate() {
-            let input = document.getElementById('inputCode').value;
-            if (!input.trim()) {
-                alert('Insert code to obfuscate');
-                return;
+        let currentSearchTerm = '';
+        let matches = [];
+        let currentMatchIndex = -1;
+        let fileHandle = null;
+
+        // Elementi DOM
+        const editor = document.getElementById('editor');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const fileNameSpan = document.getElementById('fileName');
+        const fileSizeSpan = document.getElementById('fileSize');
+        const currentWordSpan = document.getElementById('currentWord');
+        const inspectSidebar = document.getElementById('inspectSidebar');
+        const inspectContent = document.getElementById('inspectContent');
+
+        // Aggiorna contatore caratteri
+        editor.addEventListener('input', () => {
+            updateFileInfo();
+            if (currentSearchTerm) {
+                searchText();
             }
-            
-            let obfuscated = antiDeobfuscator() + '\n\n' + realObfuscator(input);
-            document.getElementById('outputCode').innerText = '-- [[ MK OBFUSCATOR 1.0 ]]\n' + obfuscated;
+        });
+
+        function updateFileInfo() {
+            const text = editor.value;
+            fileSizeSpan.textContent = `${text.length} caratteri`;
         }
-        
-        function antiDeobfuscator() {
-            return [[${_G}]]..local _0x00=setmetatable({},{__index=function()while true do end end})..local _0x01=newproxy and newproxy(true) or {}..getmetatable(_0x01).__index=function()return _0x00 end..getmetatable(_0x01).__newindex=function()error("ACCESS DENIED") end..setmetatable(_G,getmetatable(_0x01));
-        }
-        
-        function realObfuscator(code) {
-            let varMap = {};
-            let varCounter = 0;
-            let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            
-            let lines = code.split('\n');
-            let result = [];
-            
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i];
-                
-                line = line.replace(/local\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, function(match, name) {
-                    if (!varMap[name]) {
-                        let newName = "_";
-                        for (let j = 0; j < 8; j++) {
-                            newName += chars[Math.floor(Math.random() * chars.length)];
-                        }
-                        varMap[name] = newName;
-                    }
-                    return "local " + varMap[name];
+
+        // Funzione per aprire file
+        async function openFile() {
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'File di testo',
+                        accept: { 'text/plain': ['.txt'] }
+                    }]
                 });
                 
-                for (let name in varMap) {
-                    let regex = new RegExp('\\b' + name + '\\b', 'g');
-                    line = line.replace(regex, varMap[name]);
+                fileHandle = handle;
+                const file = await handle.getFile();
+                const contents = await file.text();
+                
+                editor.value = contents;
+                fileNameSpan.textContent = file.name;
+                updateFileInfo();
+                
+                // Resetta la ricerca
+                clearSearch();
+            } catch (err) {
+                console.log('Apertura annullata o errore');
+            }
+        }
+
+        // Funzione per salvare file
+        async function saveFile() {
+            try {
+                if (!fileHandle) {
+                    fileHandle = await window.showSaveFilePicker({
+                        types: [{
+                            description: 'File di testo',
+                            accept: { 'text/plain': ['.txt'] }
+                        }]
+                    });
                 }
                 
-                line = line.replace(/"(.*?)"/g, function(match) {
-                    let encoded = "";
-                    for (let j = 1; j < match.length - 1; j++) {
-                        encoded += "\\" + match.charCodeAt(j);
-                    }
-                    return '"' + encoded + '"';
-                });
+                const writable = await fileHandle.createWritable();
+                await writable.write(editor.value);
+                await writable.close();
                 
-                line = line.replace(/'(.*?)'/g, function(match) {
-                    let encoded = "";
-                    for (let j = 1; j < match.length - 1; j++) {
-                        encoded += "\\" + match.charCodeAt(j);
-                    }
-                    return "'" + encoded + "'";
-                });
-                
-                result.push(line);
+                currentWordSpan.textContent = 'File salvato!';
+                setTimeout(() => {
+                    currentWordSpan.textContent = 'Pronto';
+                }, 2000);
+            } catch (err) {
+                console.log('Salvataggio annullato o errore');
+            }
+        }
+
+        // Nuovo file
+        function newFile() {
+            editor.value = '';
+            fileHandle = null;
+            fileNameSpan.textContent = 'Nuovo documento';
+            updateFileInfo();
+            clearSearch();
+        }
+
+        // Funzione di ricerca
+        function searchText() {
+            const term = searchInput.value.trim();
+            currentSearchTerm = term;
+            
+            if (!term) {
+                clearSearch();
+                return;
+            }
+
+            const text = editor.value;
+            const lines = text.split('\n');
+            matches = [];
+            
+            // Trova tutte le occorrenze
+            lines.forEach((line, lineIndex) => {
+                let index = 0;
+                while (index < line.length) {
+                    const foundIndex = line.toLowerCase().indexOf(term.toLowerCase(), index);
+                    if (foundIndex === -1) break;
+                    
+                    matches.push({
+                        line: lineIndex,
+                        start: foundIndex,
+                        end: foundIndex + term.length,
+                        text: line.substring(Math.max(0, foundIndex - 20), Math.min(line.length, foundIndex + term.length + 20))
+                    });
+                    
+                    index = foundIndex + 1;
+                }
+            });
+
+            if (matches.length > 0) {
+                currentMatchIndex = 0;
+                highlightCurrentMatch();
+                updateInspectContent();
+            } else {
+                currentMatchIndex = -1;
+                removeHighlights();
             }
             
-            let finalCode = result.join('\n');
-            
-            finalCode = finalCode.replace(/print/g, "print");
-            finalCode = finalCode.replace(/wait/g, "wait");
-            finalCode = finalCode.replace(/spawn/g, "spawn");
-            
-            return finalCode;
+            updateNavigationButtons();
+            updateSearchResults();
         }
-        
-        function copyOutput() {
-            let output = document.getElementById('outputCode').innerText;
-            navigator.clipboard.writeText(output).then(function() {
-                alert('Copied!');
+
+        // Evidenzia il match corrente
+        function highlightCurrentMatch() {
+            if (matches.length === 0 || currentMatchIndex === -1) return;
+            
+            const match = matches[currentMatchIndex];
+            const lines = editor.value.split('\n');
+            
+            // Calcola la posizione nel testo
+            let position = 0;
+            for (let i = 0; i < match.line; i++) {
+                position += lines[i].length + 1; // +1 per il newline
+            }
+            position += match.start;
+            
+            // Seleziona il testo
+            editor.focus();
+            editor.setSelectionRange(position, position + currentSearchTerm.length);
+            
+            // Scrolla alla posizione
+            const lineHeight = 20; // approssimativo
+            editor.scrollTop = match.line * lineHeight;
+            
+            currentWordSpan.textContent = `Parola trovata alla riga ${match.line + 1}`;
+        }
+
+        // Rimuove evidenziazioni
+        function removeHighlights() {
+            currentWordSpan.textContent = 'Pronto';
+        }
+
+        // Navigazione risultati
+        function nextResult() {
+            if (matches.length === 0) return;
+            currentMatchIndex = (currentMatchIndex + 1) % matches.length;
+            highlightCurrentMatch();
+            updateNavigationButtons();
+            updateSearchResults();
+        }
+
+        function previousResult() {
+            if (matches.length === 0) return;
+            currentMatchIndex = (currentMatchIndex - 1 + matches.length) % matches.length;
+            highlightCurrentMatch();
+            updateNavigationButtons();
+            updateSearchResults();
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = matches.length === 0;
+            nextBtn.disabled = matches.length === 0;
+        }
+
+        function updateSearchResults() {
+            if (matches.length === 0) {
+                searchResults.textContent = '0/0';
+            } else {
+                searchResults.textContent = `${currentMatchIndex + 1}/${matches.length}`;
+            }
+        }
+
+        function clearSearch() {
+            searchInput.value = '';
+            currentSearchTerm = '';
+            matches = [];
+            currentMatchIndex = -1;
+            removeHighlights();
+            updateNavigationButtons();
+            updateSearchResults();
+            inspectSidebar.classList.remove('open');
+        }
+
+        // Toggle sidebar ispezione
+        function toggleInspect() {
+            if (!currentSearchTerm) {
+                alert('Inserisci una parola da cercare prima di ispezionare!');
+                return;
+            }
+            inspectSidebar.classList.toggle('open');
+            if (inspectSidebar.classList.contains('open')) {
+                updateInspectContent();
+            }
+        }
+
+        // Aggiorna contenuto ispezione
+        function updateInspectContent() {
+            if (!currentSearchTerm || matches.length === 0) {
+                inspectContent.innerHTML = '<p style="color: #888; text-align: center;">Nessun risultato trovato</p>';
+                return;
+            }
+
+            let html = `<p style="color: #888; margin-bottom: 10px;">Trovate ${matches.length} occorrenze di "${currentSearchTerm}"</p>`;
+            
+            matches.forEach((match, index) => {
+                const isCurrent = index === currentMatchIndex;
+                html += `
+                    <div class="word-entry" style="border-left-color: ${isCurrent ? '#ffd700' : '#007acc'};" onclick="goToMatch(${index})">
+                        <div><span class="line-number">Riga ${match.line + 1}:</span></div>
+                        <div class="context-text">...${match.text}...</div>
+                    </div>
+                `;
             });
+            
+            inspectContent.innerHTML = html;
+        }
+
+        // Vai a un match specifico
+        function goToMatch(index) {
+            currentMatchIndex = index;
+            highlightCurrentMatch();
+            updateSearchResults();
+            updateInspectContent();
+        }
+
+        // Event listener per tasti freccia nella ricerca
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    previousResult();
+                } else {
+                    nextResult();
+                }
+            } else if (e.key === 'Escape') {
+                clearSearch();
+                inspectSidebar.classList.remove('open');
+            }
+        });
+
+        // Supporto per incollare testo
+        editor.addEventListener('paste', (e) => {
+            // Gestione normale del paste
+            setTimeout(() => {
+                if (currentSearchTerm) {
+                    searchText();
+                }
+            }, 10);
+        });
+
+        // Inizializza
+        updateFileInfo();
+
+        // Controllo se l'API File System Access è supportata
+        if (!window.showOpenFilePicker) {
+            alert('Il tuo browser non supporta l\'apertura diretta di file. Puoi comunque incollare il testo manualmente.');
+            document.querySelector('.file-actions').style.display = 'none';
         }
     </script>
 </body>
